@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, Input, message } from "antd";
+import { Table, Button, Modal, Form, Input, message, Select } from "antd";
 import {
   getAllItems,
   createItem,
   updateItem,
   deleteItem,
 } from "../api/itemController";
+import { render } from "@testing-library/react";
+import SingleCateogry from "./SingleCateogry";
+import { getAllCategories } from "../api/categoryController";
 
 const Items = () => {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -16,8 +20,22 @@ const Items = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    fetchItems();
+    fetchCategories().then(() => {
+      fetchItems();
+    });
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setCategories([]);
+      const data = await getAllCategories();
+      setCategories(data);
+    } catch (error) {
+      message.error("Failed to fetch categories.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchItems = async () => {
     try {
@@ -89,8 +107,9 @@ const Items = () => {
     },
     {
       title: "Category",
-      dataIndex: ["category", "name"],
-      key: "category",
+      dataIndex: "categoryId",
+      key: "categoryId",
+      render: (categoryId) => <SingleCateogry id={categoryId} />,
     },
     {
       title: "Action",
@@ -121,6 +140,7 @@ const Items = () => {
         columns={columns}
         dataSource={items}
         loading={loading}
+        pagination
         rowKey="id"
       />
 
@@ -147,11 +167,17 @@ const Items = () => {
             <Input type="number" />
           </Form.Item>
           <Form.Item
-            name={["category", "name"]}
+            name={"categoryId"}
             label="Category"
             rules={[{ required: true, message: "Please input the category!" }]}
           >
-            <Input />
+            <Select>
+              {categories.map((category) => (
+                <Select.Option value={category?.id}>
+                  {category?.name}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

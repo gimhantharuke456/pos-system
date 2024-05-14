@@ -27,7 +27,7 @@ export const getAllCategories = async () => {
 
 export const getCategoryById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`, getAuthHeaders());
+    const response = await axios.get(`${API_URL}/view/${id}`, getAuthHeaders());
     return response.data;
   } catch (error) {
     console.error(

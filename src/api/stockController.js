@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/stocks";
+const API_URL = "http://localhost:8080/stocks";
 
 // Function to get the token and headers
 const getAuthHeaders = () => {
@@ -14,7 +14,7 @@ const getAuthHeaders = () => {
 
 export const getAllStocks = async () => {
   try {
-    const response = await axios.get(API_URL, getAuthHeaders());
+    const response = await axios.get(`${API_URL}/view`, getAuthHeaders());
     return response.data;
   } catch (error) {
     console.error(

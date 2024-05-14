@@ -60,13 +60,6 @@ const Dashboard = () => {
           >
             Stock
           </Menu.Item>
-          <Menu.Item
-            onClick={() => onMenuItemClicked(3)}
-            key="4"
-            icon={<UserOutlined />}
-          >
-            Users
-          </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">

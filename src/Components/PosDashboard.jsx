@@ -14,7 +14,8 @@ import { Pie, Bar, Line } from "react-chartjs-2";
 import { getAllItems } from "../api/itemController";
 import { getAllCategories } from "../api/categoryController";
 import { getAllStocks } from "../api/stockController";
-import { Col, Row, message } from "antd";
+import { Card, Col, Row, message, Spin } from "antd";
+import "./PosDashboard.css"; // Import custom CSS file
 
 ChartJS.register(
   ArcElement,
@@ -124,21 +125,28 @@ const PosDashboard = () => {
   };
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Row>
-        <Col span={8}>
-          <h2>Item Categories Distribution</h2>
-          <Pie data={pieData} />
-        </Col>
-        <Col span={8}>
-          <h2>Item Prices</h2>
-          <Bar data={barData} />
-        </Col>
-        <Col span={8}>
-          <h2>Stock Quantities</h2>
-          <Line data={lineData} />
-        </Col>
-      </Row>
+    <div className="dashboard-container">
+      {loading ? (
+        <Spin size="large" className="loading-spinner" />
+      ) : (
+        <Row gutter={[16, 16]}>
+          <Col span={8}>
+            <Card title="Item Categories Distribution" bordered={false}>
+              <Pie data={pieData} />
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title="Item Prices" bordered={false}>
+              <Bar data={barData} />
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title="Stock Quantities" bordered={false}>
+              <Line data={lineData} />
+            </Card>
+          </Col>
+        </Row>
+      )}
     </div>
   );
 };

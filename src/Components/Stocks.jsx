@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, Input, message, Select } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   getAllStocks,
   createStock,
@@ -10,6 +10,7 @@ import {
 
 import SingleItem from "./SingleItem";
 import { getAllItems } from "../api/itemController";
+import "./Stocks.css"; // Import custom CSS file
 
 const { confirm } = Modal;
 
@@ -116,7 +117,7 @@ const Stocks = () => {
 
   const columns = [
     {
-      title: "Item ID",
+      title: "Item",
       dataIndex: "itemId",
       key: "itemId",
       render: (itemId) => <SingleItem id={itemId} />,
@@ -135,8 +136,8 @@ const Stocks = () => {
       title: "Total Price (LKR)",
       dataIndex: "total",
       key: "total",
-      render: (_, recird) => {
-        const total = recird.quantity * recird.costPrice;
+      render: (_, record) => {
+        const total = record.quantity * record.costPrice;
         return <p>{total}</p>;
       },
     },
@@ -146,6 +147,7 @@ const Stocks = () => {
       render: (text, record) => (
         <>
           <Button
+            type="primary"
             style={{ marginRight: "8px" }}
             onClick={() => handleEdit(record)}
           >
@@ -164,9 +166,14 @@ const Stocks = () => {
   ];
 
   return (
-    <div>
+    <div className="stocks-container">
       <h1>Stocks</h1>
-      <Button type="primary" onClick={showModal} style={{ marginBottom: 16 }}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={showModal}
+        style={{ marginBottom: 16 }}
+      >
         Add Stock
       </Button>
       <Table
@@ -174,6 +181,7 @@ const Stocks = () => {
         dataSource={stocks}
         loading={loading}
         rowKey="id"
+        bordered
       />
 
       <Modal
@@ -186,15 +194,15 @@ const Stocks = () => {
         <Form form={form} layout="vertical" name="stockForm">
           <Form.Item
             name="itemId"
-            label="Item ID"
-            rules={[{ required: true, message: "Please input the Item ID!" }]}
+            label="Item"
+            rules={[{ required: true, message: "Please select an item!" }]}
           >
-            <Select>
-              {items.map((item) => {
-                return (
-                  <Select.Option value={item.id}>{item.name}</Select.Option>
-                );
-              })}
+            <Select placeholder="Select an item">
+              {items.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item

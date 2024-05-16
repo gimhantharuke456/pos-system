@@ -13,6 +13,7 @@ import state from "../utils";
 import Items from "../Components/Items";
 import Categories from "../Components/Categories";
 import Stocks from "../Components/Stocks";
+import PosDashboard from "../Components/PosDashboard";
 
 const { Header, Sider, Content } = Layout;
 
@@ -38,7 +39,14 @@ const Dashboard = () => {
             background: "rgba(255, 255, 255, 0.2)",
           }}
         />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
+          <Menu.Item
+            onClick={() => onMenuItemClicked(3)}
+            key="4"
+            icon={<UserOutlined />}
+          >
+            Dashboard
+          </Menu.Item>
           <Menu.Item
             onClick={() => onMenuItemClicked(0)}
             key="1"
@@ -83,6 +91,7 @@ const Dashboard = () => {
           {snap.activeIndex === 0 && <Items />}
           {snap.activeIndex === 1 && <Categories />}
           {snap.activeIndex === 2 && <Stocks />}
+          {snap.activeIndex === 3 && <PosDashboard />}
         </Content>
       </Layout>
     </Layout>
